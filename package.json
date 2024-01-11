@@ -1,0 +1,23 @@
+{
+  "name": "hsd-nethealth",
+  "version": "0.0.0",
+  "description": "Check health of handshake network and node services.",
+  "main": "lib/nethealth.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nodech/hsd-nethealth.git"
+  },
+  "keywords": [
+    "hsd",
+    "healthcheck"
+  ],
+  "author": "Nodari Chkuaselidze <nodar.chkuaselidze@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nodech/hsd-nethealth/issues"
+  },
+  "homepage": "https://github.com/nodech/hsd-nethealth#readme"
+}
