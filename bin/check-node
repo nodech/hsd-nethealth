@@ -1,0 +1,80 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const NetCheckNode = require('../lib/netcheck');
+const NetAddress = require('hsd/lib/net/netaddress');
+const netCommon = require('hsd/lib/net/common');
+
+const hostname = process.argv[2] || '';
+
+if (!validHostname(hostname)) {
+  console.error('Invalid hostname: "%s"', hostname);
+  process.exit(1);
+}
+
+const node = new NetCheckNode({
+  network: 'main',
+  argv: true,
+  env: true,
+
+  dnsCheck: false,
+  nodesCheck: true,
+  nodesCheckFrequency: 1000,
+  nodesCheckInterval: 1000,
+  nodesCheckParallel: 1,
+  nodes: [hostname]
+});
+
+node.on('node-success', (info) => {
+  const result = info.result;
+  const message = `Host: ${info.hostname}
+  Protocol Version: ${result.peer.version}
+  Agent: ${result.peer.agent}
+  Relay: ${result.peer.noRelay ? 'no' : 'yes'}
+  Height: ${result.peer.height}
+  Services: ${printServices(result.peer.services)}
+
+  Pruned: ${result.chain.pruned ? 'yes' : 'no'}
+  Tree Compacted: ${result.chain.treeCompacted ? 'yes' : 'no'}`;
+
+  console.log(message);
+  process.exit(0);
+});
+
+node.on('node-fail', (info) => {
+  console.log('FAIL: ', info);
+  process.exit(1);
+});
+
+(async () => {
+  await node.open();
+})().catch((err) => {
+  console.error(err.stack);
+  process.exit(1);
+});
+
+function printServices(services) {
+  const result = [];
+
+  if (services & netCommon.services.NETWORK)
+    result.push('NETWORK');
+  else
+    result.push('NO_NETWORK');
+
+  if (services & netCommon.services.BLOOM)
+    result.push('BLOOM');
+  else
+    result.push('NO_BLOOM');
+
+  return result.join(', ');
+}
+
+function validHostname(hostname) {
+  try {
+    NetAddress.fromHostname(hostname);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}

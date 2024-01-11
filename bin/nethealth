@@ -15,6 +15,14 @@ node.on('error', (err) => {
   process.exit(1);
 });
 
+node.on('node-success', (info) => {
+  console.log('SUCCESS:', info);
+});
+
+node.on('node-fail', (info) => {
+  console.log('FAIL: ', info);
+});
+
 (async () => {
   await node.open();
 })().catch((err) => {
