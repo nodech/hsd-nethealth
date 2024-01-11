@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const NetCheckNode = require('../lib/netcheck');
+
+const node = new NetCheckNode({
+  network: 'main',
+  argv: true,
+  env: true
+});
+
+node.on('error', (err) => {
+  console.error(err.stack);
+  process.exit(1);
+});
+
+(async () => {
+  await node.open();
+})().catch((err) => {
+  console.error(err.stack);
+  process.exit(1);
+});
