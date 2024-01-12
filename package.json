@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/nodech/hsd-nethealth#readme",
   "dependencies": {
+    "bcrypto": "^5.4.0",
     "bheep": "^0.1.6",
     "blst": "^0.1.6",
     "bsert": "^0.0.12",

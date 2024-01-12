@@ -23,20 +23,33 @@ const node = new NetCheckNode({
   nodesCheckFrequency: 1000,
   nodesCheckInterval: 1000,
   nodesCheckParallel: 1,
+  nodesDiscoverNew: false,
+  nodesCheckPrune: true,
+  nodesCheckCompact: true,
   nodes: [hostname]
 });
 
 node.on('node-success', (info) => {
   const result = info.result;
+  let compacted = 'N/A';
+  let pruned = 'N/A';
+
+  if (result.chain.pruned != null)
+    pruned = result.chain.pruned ? 'yes' : 'no';
+
+  if (result.chain.treeCompacted != null)
+    compacted = result.chain.treeCompacted ? 'yes' : 'no';
+
   const message = `Host: ${info.hostname}
   Protocol Version: ${result.peer.version}
   Agent: ${result.peer.agent}
   Relay: ${result.peer.noRelay ? 'no' : 'yes'}
   Height: ${result.peer.height}
   Services: ${printServices(result.peer.services)}
+  Encrypted: ${result.peer.brontide ? 'yes' : 'no'}
 
-  Pruned: ${result.chain.pruned ? 'yes' : 'no'}
-  Tree Compacted: ${result.chain.treeCompacted ? 'yes' : 'no'}`;
+  Pruned: ${pruned}
+  Tree Compacted: ${compacted}`;
 
   console.log(message);
   process.exit(0);
