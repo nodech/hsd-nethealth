@@ -1,6 +1,6 @@
 {
   "name": "hsd-nethealth",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Check health of handshake network and node services.",
   "main": "lib/nethealth.js",
   "scripts": {
